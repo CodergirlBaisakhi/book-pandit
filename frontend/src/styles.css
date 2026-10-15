@@ -210,14 +210,42 @@ fieldset { border: 1px solid var(--line); border-radius: 16px; }
 }
 .rating { color: var(--maroon); font-weight: 650; }
 
-.booking p { margin: 6px 0; }
+.booking {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+.booking p { margin: 0; }
+.booking-top {
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.booking-top h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  flex: 1 1 12rem;
+}
+.booking h3 { margin: 10px 0 0; }
+.booking .tags { width: 100%; margin: 2px 0 0; }
+.booking .actions {
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
 .when, .where { font-size: 1.05rem; }
 .status {
+  flex: 0 0 auto;
   border-radius: 999px;
   padding: 4px 10px;
   background: #fff3d6;
   color: #8a4b08;
   font-size: 0.85rem;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 .status[data-status="ACCEPTED"], .status[data-status="COMPLETED"] { background: #e5f6ec; color: var(--leaf); }
 .status[data-status="DECLINED"], .status[data-status="CANCELLED"] { background: #fde8e8; color: #9b2c2c; }

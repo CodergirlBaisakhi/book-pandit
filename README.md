@@ -7,6 +7,8 @@ The published test site is [https://codergirlbaisakhi.github.io/book-pandit/](ht
 - `backend` — Next.js API and SQLite database
 - `frontend` — Angular app
 
+A full guide to the screens, stored fields, prices, and where each file lives is in [APP-GUIDE.md](APP-GUIDE.md).
+
 ## Setup
 
 Use two terminals from this folder.
