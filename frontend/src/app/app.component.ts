@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { environment } from "../environments/environment";
 import { AuthService } from "./core/auth.service";
 
@@ -11,9 +11,22 @@ import { AuthService } from "./core/auth.service";
 })
 export class AppComponent {
   auth = inject(AuthService);
+  private router = inject(Router);
   demo = environment.demo;
+  menuOpen = false;
+
+  constructor() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) this.menuOpen = false;
+    });
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
 
   logout() {
+    this.closeMenu();
     this.auth.logout();
   }
 }

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { ApiService } from "../../core/api.service";
-import { hoursLabel, inr } from "../../core/format";
+import { hoursLabel, inr, photoFor } from "../../core/format";
 import { CATEGORY_ORDER, Puja } from "../../core/models";
 
 @Component({
@@ -16,6 +16,7 @@ export class PujaListComponent implements OnInit {
   error = "";
   inr = inr;
   hoursLabel = hoursLabel;
+  photoFor = photoFor;
 
   ngOnInit() {
     this.api.pujas().subscribe({

@@ -27,6 +27,19 @@ export function tomorrowISO() {
   return `${now.getFullYear()}-${month}-${day}`;
 }
 
+const CATEGORY_PHOTOS: Record<string, string> = {
+  "Daily worship": "images/diyas.jpg",
+  "Deity-specific puja": "images/altar.jpg",
+  "Weekly puja and vrata": "images/altar.jpg",
+  "Festival puja": "images/diyas.jpg",
+  "Family occasion puja": "images/doorway.jpg",
+  "Special-purpose rituals": "images/hero-puja.jpg",
+};
+
+export function photoFor(category: string) {
+  return CATEGORY_PHOTOS[category] ?? "images/hero-puja.jpg";
+}
+
 export function statusLabel(status: string) {
   switch (status) {
     case "PENDING":

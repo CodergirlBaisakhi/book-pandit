@@ -1,27 +1,64 @@
-<div class="shell">
-  <header class="topbar">
-    <a class="brand" routerLink="/">
-      <span class="mark" aria-hidden="true"></span>
-      <span>Book Pandit</span>
-    </a>
-    @if (auth.user(); as user) {
-      <nav>
-        @if (user.role === "FAMILY") {
-          <a routerLink="/pujas" routerLinkActive="active">Pujas</a>
-          <a routerLink="/bookings" routerLinkActive="active">My bookings</a>
+<div class="site">
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" routerLink="/" (click)="closeMenu()">
+        <span class="mark" aria-hidden="true"></span>
+        <span>
+          <strong>Book Pandit</strong>
+          <small>Home puja, booked simply</small>
+        </span>
+      </a>
+      <button type="button" class="menu-button" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen">
+        {{ menuOpen ? "Close" : "Menu" }}
+      </button>
+      <nav [class.open]="menuOpen" (click)="closeMenu()">
+        @if (auth.user(); as user) {
+          @if (user.role === "FAMILY") {
+            <a routerLink="/pujas" routerLinkActive="active">Pujas</a>
+            <a routerLink="/bookings" routerLinkActive="active">My bookings</a>
+          } @else {
+            <a routerLink="/pandit" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Schedule</a>
+            <a routerLink="/pandit/profile" routerLinkActive="active">Profile</a>
+          }
+          <span class="who">{{ user.name }}</span>
+          <button type="button" class="ghost" (click)="logout()">Log out</button>
         } @else {
-          <a routerLink="/pandit" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Schedule</a>
-          <a routerLink="/pandit/profile" routerLinkActive="active">Profile</a>
+          <a routerLink="/login" routerLinkActive="active">Sign in</a>
+          <a routerLink="/register" routerLinkActive="active">Create account</a>
         }
-        <span class="who">{{ user.name }}</span>
-        <button type="button" class="ghost" (click)="logout()">Log out</button>
       </nav>
-    }
+    </div>
   </header>
+
   @if (demo) {
-    <p class="demo-note">This published copy saves bookings in this browser, so you can test the full visit here. Sign in as the family, book a pandit, then sign in as that pandit in the same browser.</p>
+    <div class="wrap">
+      <p class="demo-note">This published copy saves bookings in this browser, so you can test the full visit here. Sign in as the family, book a pandit, then sign in as that pandit in the same browser.</p>
+    </div>
   }
-  <main>
+
+  <main class="wrap">
     <router-outlet />
   </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <p class="footer-brand">Book Pandit</p>
+        <p>Choose a puja, see the ingredients, and book a pandit for the hours you need. The price shown is what the pandit is paid.</p>
+      </div>
+      <div>
+        <p class="footer-label">Pages</p>
+        <a routerLink="/login">Sign in</a>
+        <a routerLink="/register">Create an account</a>
+        <a routerLink="/pujas">Browse pujas</a>
+      </div>
+      <div>
+        <p class="footer-label">Sample logins</p>
+        <p>Family: family&#64;bookpandit.local</p>
+        <p>Pandit: raghunath&#64;bookpandit.local</p>
+        <p>Password: password123</p>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">© 2026 Book Pandit. Pay the pandit in cash or UPI on the day of the puja.</div>
+  </footer>
 </div>

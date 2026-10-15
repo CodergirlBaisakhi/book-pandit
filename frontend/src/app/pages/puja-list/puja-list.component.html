@@ -1,7 +1,12 @@
 <section class="page">
-  <p class="eyebrow">Choose a ritual</p>
-  <h1>Book a pandit</h1>
-  <p class="lede">Each puja has a basic price. Extra hours are added when you book, and that total is what the pandit is paid.</p>
+  <div class="banner">
+    <img src="images/doorway.jpg" alt="Marigold flowers and mango leaves at a home entrance">
+    <div>
+      <p class="eyebrow">Choose a ritual</p>
+      <h1>Book a pandit</h1>
+      <p class="lede">Each puja has a basic price. Extra hours are added when you book, and that total is what the pandit is paid.</p>
+    </div>
+  </div>
 
   @if (error) {
     <p class="form-error">{{ error }}</p>
@@ -12,6 +17,7 @@
     <div class="grid">
       @for (puja of group.pujas; track puja.id) {
         <article class="card puja-card">
+          <img class="card-photo" [src]="photoFor(group.category)" alt="">
           <h3>{{ puja.name }}</h3>
           <p>{{ puja.description }}</p>
           <p class="price">{{ inr(puja.basePrice) }} <span>basic price · {{ hoursLabel(puja.includedHours) }}</span></p>

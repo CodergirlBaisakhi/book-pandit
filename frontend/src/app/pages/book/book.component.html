@@ -1,9 +1,14 @@
 @if (puja) {
   <section class="page">
     <a class="back" routerLink="/pujas">All pujas</a>
-    <p class="eyebrow">{{ puja.category }}</p>
-    <h1>{{ puja.name }}</h1>
-    <p class="lede">{{ puja.description }}</p>
+    <div class="banner">
+      <img [src]="photoFor(puja.category)" [alt]="puja.name">
+      <div>
+        <p class="eyebrow">{{ puja.category }}</p>
+        <h1>{{ puja.name }}</h1>
+        <p class="lede">{{ puja.description }}</p>
+      </div>
+    </div>
 
     <div class="book-layout">
       <div class="stack">

@@ -3,7 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ApiService } from "../../core/api.service";
 import { errorText } from "../../core/auth.service";
-import { hoursLabel, inr, tomorrowISO } from "../../core/format";
+import { hoursLabel, inr, photoFor, tomorrowISO } from "../../core/format";
 import { Pandit, Puja } from "../../core/models";
 
 @Component({
@@ -31,6 +31,7 @@ export class BookComponent implements OnInit {
   busy = false;
   inr = inr;
   hoursLabel = hoursLabel;
+  photoFor = photoFor;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get("id");
