@@ -1,0 +1,77 @@
+<section class="page">
+  <p class="eyebrow">Your schedule</p>
+  <h1>Visits</h1>
+  <p class="lede">Accept a request when you are free. An accepted visit blocks that time.</p>
+  @if (error) {
+    <p class="form-error">{{ error }}</p>
+  }
+  @if (!bookings.length) {
+    <div class="card empty">
+      <p>No visits yet. Families will see you when your profile lists the pujas you perform.</p>
+      <a class="primary" routerLink="/pandit/profile">Edit profile</a>
+    </div>
+  } @else {
+    <h2>Requests</h2>
+    @if (!pending().length) {
+      <p class="meta">No new requests.</p>
+    }
+    <div class="stack">
+      @for (booking of pending(); track booking.id) {
+        <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
+      }
+    </div>
+
+    <h2>Accepted</h2>
+    @if (!accepted().length) {
+      <p class="meta">No accepted visits.</p>
+    }
+    <div class="stack">
+      @for (booking of accepted(); track booking.id) {
+        <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
+      }
+    </div>
+
+    @if (earlier().length) {
+      <details class="earlier">
+        <summary>Earlier visits ({{ earlier().length }})</summary>
+        <div class="stack">
+          @for (booking of earlier(); track booking.id) {
+            <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
+          }
+        </div>
+      </details>
+    }
+  }
+</section>
+
+<ng-template #card let-booking>
+  <article class="card booking">
+    <div class="booking-top">
+      <h2>{{ booking.puja.name }}</h2>
+      <span class="status" [attr.data-status]="booking.status">{{ statusLabel(booking.status) }}</span>
+    </div>
+    <p class="when">{{ booking.date }} · {{ booking.startTime }}–{{ booking.endTime }} · {{ hoursLabel(booking.hours) }}</p>
+    <p class="where">{{ booking.address }}</p>
+    <p><strong>{{ booking.family.name }}</strong> · {{ booking.family.phone }}</p>
+    @if (booking.notes) {
+      <p>Note: {{ booking.notes }}</p>
+    }
+    <p class="price">You will be paid {{ inr(booking.amountDue) }} <span>{{ booking.paid ? "marked paid" : "cash or UPI on the day" }}</span></p>
+    <h3>Ingredients the family should keep ready</h3>
+    <ul class="tags">
+      @for (item of booking.puja.ingredients; track item.id) {
+        <li>{{ item.name }}</li>
+      }
+    </ul>
+    <div class="actions">
+      @if (booking.status === "PENDING") {
+        <button type="button" class="primary" (click)="act(booking, 'accept')">Accept</button>
+        <button type="button" class="ghost" (click)="act(booking, 'decline')">Decline</button>
+      }
+      @if (booking.status === "ACCEPTED") {
+        <button type="button" class="primary" (click)="act(booking, 'complete')">Mark complete</button>
+        <button type="button" class="ghost" (click)="cancel(booking)">Cancel</button>
+      }
+    </div>
+  </article>
+</ng-template>

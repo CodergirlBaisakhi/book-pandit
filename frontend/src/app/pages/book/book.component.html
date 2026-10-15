@@ -1,0 +1,105 @@
+@if (puja) {
+  <section class="page">
+    <a class="back" routerLink="/pujas">All pujas</a>
+    <p class="eyebrow">{{ puja.category }}</p>
+    <h1>{{ puja.name }}</h1>
+    <p class="lede">{{ puja.description }}</p>
+
+    <div class="book-layout">
+      <div class="stack">
+        <article class="card">
+          <h2>Ingredients to arrange</h2>
+          <p class="meta">Keep these ready at home. The pandit does not bring them.</p>
+          <ul class="ingredients">
+            @for (item of puja.ingredients; track item.id) {
+              <li>{{ item.name }}</li>
+            }
+          </ul>
+        </article>
+      </div>
+
+      <form class="card stack" (ngSubmit)="confirm()">
+        <h2>Visit</h2>
+        <div class="split">
+          <label>
+            Date
+            <input name="date" type="date" [(ngModel)]="date" required />
+          </label>
+          <label>
+            Start time
+            <input name="startTime" type="time" [(ngModel)]="startTime" required />
+          </label>
+        </div>
+        <label>
+          Hours
+          <input name="hours" type="number" min="0.5" max="12" step="0.5" [(ngModel)]="hours" required />
+        </label>
+        <label>
+          Address
+          <textarea name="address" rows="2" [(ngModel)]="address" placeholder="House, street, and city" required></textarea>
+        </label>
+        <label>
+          Note for the pandit
+          <textarea name="notes" rows="2" [(ngModel)]="notes"></textarea>
+        </label>
+
+        <div class="price-box">
+          <p>Basic price for {{ hoursLabel(puja.includedHours) }} <strong>{{ inr(puja.basePrice) }}</strong></p>
+          <p>Extra {{ hoursLabel(extraHours()) }} × {{ inr(puja.extraHourRate) }} <strong>{{ inr(extraHours() * puja.extraHourRate) }}</strong></p>
+          <p class="total">Pandit is paid <strong>{{ inr(amount()) }}</strong></p>
+          <p class="meta">Pay this in cash or UPI on the day of the puja.</p>
+        </div>
+
+        <h2>Choose a pandit</h2>
+        <div class="split">
+          <label>
+            Minimum rating
+            <select name="minRating" [(ngModel)]="minRating" (ngModelChange)="loadPandits()">
+              <option value="">Any rating</option>
+              <option value="4">4 and above</option>
+              <option value="4.5">4.5 and above</option>
+            </select>
+          </label>
+          <label>
+            Qualification
+            <input name="qualification" [(ngModel)]="qualification" (ngModelChange)="loadPandits()" placeholder="Shastri, Acharya" />
+          </label>
+        </div>
+
+        @if (listError) {
+          <p class="form-error">{{ listError }}</p>
+        }
+        @if (!pandits.length && !listError) {
+          <p class="meta">No pandit matches that filter.</p>
+        }
+        <div class="pandit-list">
+          @for (pandit of pandits; track pandit.id) {
+            <button
+              type="button"
+              class="pandit"
+              [class.selected]="selectedPanditId === pandit.id"
+              (click)="selectedPanditId = pandit.id"
+            >
+              <span class="pandit-top">
+                <strong>{{ pandit.name }}</strong>
+                <span class="rating">★ {{ pandit.rating.toFixed(1) }}</span>
+              </span>
+              <span>{{ pandit.qualification }} · {{ pandit.experienceYears }} years · {{ pandit.city }}</span>
+              <span>{{ pandit.languages }} · {{ pandit.reviewCount }} reviews</span>
+              <span class="meta">{{ pandit.bio }}</span>
+            </button>
+          }
+        </div>
+
+        @if (error) {
+          <p class="form-error">{{ error }}</p>
+        }
+        <button class="primary" type="submit" [disabled]="busy || !selectedPanditId">
+          {{ busy ? "Sending request…" : "Request this pandit" }}
+        </button>
+      </form>
+    </div>
+  </section>
+} @else if (error) {
+  <p class="form-error">{{ error }}</p>
+}

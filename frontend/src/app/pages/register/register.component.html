@@ -1,0 +1,45 @@
+<section class="narrow">
+  <p class="eyebrow">Create an account</p>
+  <h1>Join Book Pandit</h1>
+  <p class="lede">Families book a visit. Pandits accept the time they can come.</p>
+
+  <form class="card stack" (ngSubmit)="submit()">
+    <div class="role-switch" role="group" aria-label="Account type">
+      <button type="button" [class.selected]="role === 'FAMILY'" (click)="role = 'FAMILY'">I am booking</button>
+      <button type="button" [class.selected]="role === 'PANDIT'" (click)="role = 'PANDIT'">I am a pandit</button>
+    </div>
+
+    <label>Name <input name="name" [(ngModel)]="name" required /></label>
+    <label>Email <input name="email" type="email" [(ngModel)]="email" required /></label>
+    <label>Phone <input name="phone" [(ngModel)]="phone" required /></label>
+    <label>Password <input name="password" type="password" [(ngModel)]="password" minlength="6" required /></label>
+
+    @if (role === "PANDIT") {
+      <label>Qualification <input name="qualification" [(ngModel)]="qualification" placeholder="Shastri, Acharya" required /></label>
+      <label>Years of experience <input name="experienceYears" type="number" min="0" max="70" [(ngModel)]="experienceYears" required /></label>
+      <label>Languages <input name="languages" [(ngModel)]="languages" placeholder="Sanskrit, Odia, Hindi" required /></label>
+      <label>City <input name="city" [(ngModel)]="city" required /></label>
+      <label>About you <textarea name="bio" rows="3" [(ngModel)]="bio"></textarea></label>
+
+      <fieldset>
+        <legend>Pujas you perform</legend>
+        @for (group of groups(); track group.category) {
+          <p class="group-label">{{ group.category }}</p>
+          @for (puja of group.pujas; track puja.id) {
+            <label class="check">
+              <input type="checkbox" [checked]="selected.has(puja.id)" (change)="togglePuja(puja.id, $any($event.target).checked)" />
+              {{ puja.name }}
+            </label>
+          }
+        }
+      </fieldset>
+    }
+
+    @if (error) {
+      <p class="form-error">{{ error }}</p>
+    }
+    <button class="primary" type="submit" [disabled]="busy">{{ busy ? "Creating account…" : "Create account" }}</button>
+  </form>
+
+  <p class="switch">Already registered? <a routerLink="/login">Sign in</a></p>
+</section>

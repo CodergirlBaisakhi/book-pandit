@@ -1,0 +1,71 @@
+<section class="page">
+  <p class="eyebrow">Your visits</p>
+  <h1>My bookings</h1>
+  <p class="lede">A request stays pending until the pandit accepts it.</p>
+  @if (error) {
+    <p class="form-error">{{ error }}</p>
+  }
+  @if (!bookings.length) {
+    <div class="card empty">
+      <p>You have no bookings yet.</p>
+      <a class="primary" routerLink="/pujas">Browse pujas</a>
+    </div>
+  }
+  <div class="stack">
+    @for (booking of bookings; track booking.id) {
+      <article class="card booking">
+        <div class="booking-top">
+          <h2>{{ booking.puja.name }}</h2>
+          <span class="status" [attr.data-status]="booking.status">{{ statusLabel(booking.status) }}</span>
+        </div>
+        <p>{{ booking.date }} · {{ booking.startTime }}–{{ booking.endTime }} · {{ hoursLabel(booking.hours) }}</p>
+        <p>{{ booking.address }}</p>
+        <p><strong>{{ booking.pandit.name }}</strong> · {{ booking.pandit.qualification }} · ★ {{ booking.pandit.rating.toFixed(1) }}</p>
+        <p>Phone {{ booking.pandit.phone }}</p>
+        <p class="price">{{ inr(booking.amountDue) }} <span>{{ booking.paid ? "marked paid" : "to pay the pandit" }}</span></p>
+        <p class="meta">
+          Basic {{ inr(booking.basePrice) }}
+          @if (booking.extraHours > 0) {
+            + {{ hoursLabel(booking.extraHours) }} × {{ inr(booking.extraHourRate) }}
+          }
+        </p>
+        <h3>Ingredients</h3>
+        <ul class="tags">
+          @for (item of booking.puja.ingredients; track item.id) {
+            <li>{{ item.name }}</li>
+          }
+        </ul>
+        <div class="actions">
+          @if (canCancel(booking)) {
+            <button type="button" class="ghost" (click)="cancel(booking)">Cancel</button>
+          }
+          @if (canPay(booking)) {
+            <button type="button" class="primary" (click)="act(booking, 'mark-paid')">Mark paid</button>
+          }
+        </div>
+        @if (canRate(booking)) {
+          <form class="rate" (ngSubmit)="rate(booking)">
+            <label>
+              Rating
+              <select [name]="'rating-' + booking.id" [(ngModel)]="ratingDraft[booking.id]">
+                <option [ngValue]="5">5</option>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="3">3</option>
+                <option [ngValue]="2">2</option>
+                <option [ngValue]="1">1</option>
+              </select>
+            </label>
+            <label>
+              Comment
+              <input [name]="'comment-' + booking.id" [(ngModel)]="commentDraft[booking.id]" />
+            </label>
+            <button class="primary" type="submit">Save rating</button>
+          </form>
+        }
+        @if (booking.review) {
+          <p>Your rating: ★ {{ booking.review.rating }} {{ booking.review.comment }}</p>
+        }
+      </article>
+    }
+  </div>
+</section>

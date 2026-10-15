@@ -1,0 +1,24 @@
+<section class="page">
+  <p class="eyebrow">Choose a ritual</p>
+  <h1>Book a pandit</h1>
+  <p class="lede">Each puja has a basic price. Extra hours are added when you book, and that total is what the pandit is paid.</p>
+
+  @if (error) {
+    <p class="form-error">{{ error }}</p>
+  }
+
+  @for (group of groups(); track group.category) {
+    <h2>{{ group.category }}</h2>
+    <div class="grid">
+      @for (puja of group.pujas; track puja.id) {
+        <article class="card puja-card">
+          <h3>{{ puja.name }}</h3>
+          <p>{{ puja.description }}</p>
+          <p class="price">{{ inr(puja.basePrice) }} <span>basic price · {{ hoursLabel(puja.includedHours) }}</span></p>
+          <p class="meta">{{ puja.ingredients.length }} ingredients to arrange</p>
+          <a class="primary" [routerLink]="['/pujas', puja.id]">Book</a>
+        </article>
+      }
+    </div>
+  }
+</section>

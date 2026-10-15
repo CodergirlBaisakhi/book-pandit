@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  name          String
+  phone         String
+  role          String
+  createdAt     DateTime       @default(now())
+  panditProfile PanditProfile?
+  bookings      Booking[]      @relation("FamilyBookings")
+  reviews       Review[]
+}
+
+model PanditProfile {
+  id              String       @id @default(cuid())
+  userId          String       @unique
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  qualification   String
+  experienceYears Int
+  languages       String
+  bio             String
+  city            String
+  rating          Float        @default(0)
+  reviewCount     Int          @default(0)
+  pujas           PanditPuja[]
+  bookings        Booking[]
+}
+
+model Puja {
+  id            String           @id @default(cuid())
+  slug          String           @unique
+  name          String
+  category      String
+  description   String
+  basePrice     Int
+  includedHours Float
+  extraHourRate Int
+  ingredients   PujaIngredient[]
+  pandits       PanditPuja[]
+  bookings      Booking[]
+}
+
+model PujaIngredient {
+  id        String @id @default(cuid())
+  pujaId    String
+  puja      Puja   @relation(fields: [pujaId], references: [id], onDelete: Cascade)
+  name      String
+  sortOrder Int    @default(0)
+}
+
+model PanditPuja {
+  panditId String
+  pujaId   String
+  pandit   PanditProfile @relation(fields: [panditId], references: [id], onDelete: Cascade)
+  puja     Puja          @relation(fields: [pujaId], references: [id], onDelete: Cascade)
+
+  @@id([panditId, pujaId])
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  familyId      String
+  family        User          @relation("FamilyBookings", fields: [familyId], references: [id], onDelete: Cascade)
+  panditId      String
+  pandit        PanditProfile @relation(fields: [panditId], references: [id], onDelete: Cascade)
+  pujaId        String
+  puja          Puja          @relation(fields: [pujaId], references: [id])
+  date          String
+  startTime     String
+  hours         Float
+  address       String
+  notes         String        @default("")
+  basePrice     Int
+  extraHours    Float
+  extraHourRate Int
+  amountDue     Int
+  status        String        @default("PENDING")
+  paid          Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  review        Review?
+
+  @@index([panditId, date])
+  @@index([familyId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  familyId  String
+  family    User     @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  panditId  String
+  rating    Int
+  comment   String   @default("")
+  createdAt DateTime @default(now())
+}

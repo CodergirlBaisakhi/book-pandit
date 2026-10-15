@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.next/
+out/
+.angular/
+*.log
+backend/.env
+backend/prisma/dev.db
+backend/prisma/dev.db-journal

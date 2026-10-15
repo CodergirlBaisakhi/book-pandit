@@ -1,0 +1,24 @@
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/">
+      <span class="mark" aria-hidden="true"></span>
+      <span>Book Pandit</span>
+    </a>
+    @if (auth.user(); as user) {
+      <nav>
+        @if (user.role === "FAMILY") {
+          <a routerLink="/pujas" routerLinkActive="active">Pujas</a>
+          <a routerLink="/bookings" routerLinkActive="active">My bookings</a>
+        } @else {
+          <a routerLink="/pandit" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Schedule</a>
+          <a routerLink="/pandit/profile" routerLinkActive="active">Profile</a>
+        }
+        <span class="who">{{ user.name }}</span>
+        <button type="button" class="ghost" (click)="logout()">Log out</button>
+      </nav>
+    }
+  </header>
+  <main>
+    <router-outlet />
+  </main>
+</div>
