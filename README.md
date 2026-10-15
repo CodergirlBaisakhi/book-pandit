@@ -2,6 +2,8 @@
 
 Families book a pandit for a puja. Pandits see the visit time and address, then accept or cancel. The app stores what the pandit is owed. Payment is cash or UPI on the day.
 
+The published test site is [https://codergirlbaisakhi.github.io/book-pandit/](https://codergirlbaisakhi.github.io/book-pandit/). GitHub Pages cannot run the API or the database, so that copy keeps bookings in the browser. Sign in as the family, make a booking, then sign in as the pandit in the same browser to accept it.
+
 - `backend` — Next.js API and SQLite database
 - `frontend` — Angular app
 

@@ -36,6 +36,13 @@ p { line-height: 1.5; }
 a { color: var(--saffron-deep); }
 
 .shell { max-width: 1080px; margin: 0 auto; padding: 8px 20px 72px; }
+.demo-note {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #fff6ea;
+  color: var(--maroon);
+}
 
 .brand {
   display: flex;
